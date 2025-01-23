@@ -18,6 +18,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
   @override
   void initState() {
     // TODO: implement initState
+    print('Init State of category details ');
     super.initState();
     categoryDetailsViewModel.getSources(widget.category.id);
   }

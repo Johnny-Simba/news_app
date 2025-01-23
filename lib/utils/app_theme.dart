@@ -18,8 +18,9 @@ class AppTheme{
         labelMedium: AppStyles.medium14Black,
         headlineLarge: AppStyles.medium20Black,
         bodyLarge: AppStyles.medium24Black,
+        bodyMedium: AppStyles.bold20White
       ),
-    indicatorColor: AppColors.blackColor
+    indicatorColor: AppColors.blackColor,
   );
 
 
@@ -38,6 +39,7 @@ class AppTheme{
         labelMedium: AppStyles.medium14White,
         headlineLarge: AppStyles.medium20White,
         bodyLarge: AppStyles.medium24White,
+        bodyMedium: AppStyles.bold20Black
       ),
     indicatorColor: AppColors.whiteColor
   );

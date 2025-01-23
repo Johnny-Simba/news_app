@@ -39,4 +39,22 @@ class ApiManager{
       throw e;
     }
   }
+  static Future<NewsResponse> getNewsByPage(String sourceId, int pageKey,  int pageSize) async{
+    Uri url = Uri.https(
+        ApiConstants.baseUrl,
+        EndPoints.newsApi,
+        {
+          'apiKey' : ApiConstants.apiKey,
+          'sources' : sourceId,
+          'page' : pageKey,
+          'pageSize' : pageSize
+        }
+    );
+    try{
+      var response = await http.get(url);
+      return NewsResponse.fromJson(jsonDecode(response.body));
+    }catch(e){
+      throw e;
+    }
+  }
 }
