@@ -13,7 +13,7 @@ class ApiManager{
   static Future<SourceResponse> getSources(String categoryId) async{
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
       'apiKey' : ApiConstants.apiKey,
-      'category' : categoryId
+      'category' : categoryId,
     });
     try{
       var response = await http.get(url);
@@ -29,7 +29,7 @@ class ApiManager{
         EndPoints.newsApi,
         {
           'apiKey' : ApiConstants.apiKey,
-          'sources' : sourceId
+          'sources' : sourceId,
         }
     );
     try{
@@ -39,15 +39,14 @@ class ApiManager{
       throw e;
     }
   }
-  static Future<NewsResponse> getNewsByPage(String sourceId, int pageKey,  int pageSize) async{
+  static Future<NewsResponse> getNewsByPage(String sourceId, int pageKey) async{
     Uri url = Uri.https(
         ApiConstants.baseUrl,
         EndPoints.newsApi,
         {
           'apiKey' : ApiConstants.apiKey,
           'sources' : sourceId,
-          'page' : pageKey,
-          'pageSize' : pageSize
+          'page' : '$pageKey',
         }
     );
     try{

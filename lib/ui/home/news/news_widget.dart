@@ -15,6 +15,7 @@ class NewsWidget extends StatefulWidget {
 }
 
 class _NewsWidgetState extends State<NewsWidget> {
+
   NewsViewModel newsViewModel = NewsViewModel();
 
   @override
@@ -54,11 +55,45 @@ class _NewsWidgetState extends State<NewsWidget> {
                 ),
               );
             }else{
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  return NewsItem(news: newsViewModel.newsList![index]);
+              return RefreshIndicator(
+                onRefresh: newsViewModel.refresh,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    if(index < newsViewModel.newsList!.length){
+                      return NewsItem(news: newsViewModel.newsList![index]);
+                    }else if(newsViewModel.isLoading){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: appThemeProvider.appTheme == ThemeMode.dark ?
+                          AppColors.whiteColor : AppColors.blackColor,
+                        ),
+                      );
+                    }
+                    else{
+                      return Center(
+                        child: newsViewModel.hasMore ?
+                        InkWell(
+                          onTap: () {
+                            newsViewModel.addPage(widget.source.id!);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 10
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Theme.of(context).indicatorColor
+                            ),
+                            child: Text('Load More News', style: Theme.of(context).textTheme.bodyMedium,),
+                          ),
+                        )
+                        :Text('No More News',style: Theme.of(context).textTheme.labelLarge,),
+                      );
+                    }
                   },
-                itemCount: newsViewModel.newsList!.length,
+                  itemCount: newsViewModel.newsList!.length + 1,
+                ),
               );
             }
           },
