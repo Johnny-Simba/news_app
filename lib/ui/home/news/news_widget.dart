@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:news_applicaiton/model/SourceResponse.dart';
-import 'package:news_applicaiton/providers/app_theme_provider.dart';
 import 'package:news_applicaiton/ui/home/news/news_item.dart';
 import 'package:news_applicaiton/ui/home/news/news_view_model.dart';
-import 'package:news_applicaiton/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class NewsWidget extends StatefulWidget {
   final Source source;
-  NewsWidget({required this.source});
+  NewsWidget({required this.source, Key? key}) : super(key: key);
 
   @override
   State<NewsWidget> createState() => _NewsWidgetState();
@@ -21,13 +19,13 @@ class _NewsWidgetState extends State<NewsWidget> {
   @override
   void initState() {
     // TODO: implement initState
+    print('Init State of News Widget');
     super.initState();
     newsViewModel.getNewsBySourceId(widget.source.id!);
   }
 
   @override
   Widget build(BuildContext context) {
-    var appThemeProvider = Provider.of<AppThemeProvider>(context);
     return ChangeNotifierProvider(
       create: (context) => newsViewModel,
       child: Consumer<NewsViewModel>(
@@ -50,8 +48,7 @@ class _NewsWidgetState extends State<NewsWidget> {
             }else if(newsViewModel.newsList == null){
               return Center(
                 child: CircularProgressIndicator(
-                  color: appThemeProvider.appTheme == ThemeMode.dark ?
-                  AppColors.whiteColor : AppColors.blackColor,
+                  color: Theme.of(context).indicatorColor
                 ),
               );
             }else{
@@ -64,8 +61,7 @@ class _NewsWidgetState extends State<NewsWidget> {
                     }else if(newsViewModel.isLoading){
                       return Center(
                         child: CircularProgressIndicator(
-                          color: appThemeProvider.appTheme == ThemeMode.dark ?
-                          AppColors.whiteColor : AppColors.blackColor,
+                          color: Theme.of(context).indicatorColor
                         ),
                       );
                     }

@@ -31,6 +31,7 @@ class _SourceTabWidgetState extends State<SourceTabWidget> {
                     TabBar(
                       onTap: (index) {
                         viewModel.updateSelectedIndex(index);
+
                       },
                       tabAlignment: TabAlignment.start,
                       indicatorColor: Theme.of(context).indicatorColor,
@@ -46,7 +47,10 @@ class _SourceTabWidgetState extends State<SourceTabWidget> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: NewsWidget(source: widget.sourcesList[viewModel.selectedIndex]),
+                        child: NewsWidget(
+                          source: widget.sourcesList[viewModel.selectedIndex],
+                          key: ValueKey(widget.sourcesList[viewModel.selectedIndex].id),
+                        ),
                       ),
                     )
                   ],

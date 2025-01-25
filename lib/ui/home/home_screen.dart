@@ -4,6 +4,7 @@ import 'package:news_applicaiton/ui/home/category/category_fragment.dart';
 import 'package:news_applicaiton/ui/home/category/category_model.dart';
 import 'package:news_applicaiton/ui/home/drawer/home_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:news_applicaiton/ui/home/search/search.dart';
 
 import '../../utils/app_colors.dart';
 
@@ -24,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedCategory!.title,style: Theme.of(context).textTheme.headlineLarge,),
         iconTheme: Theme.of(context).iconTheme,
         actions: [
-          IconButton(onPressed: (){}, 
+          IconButton(onPressed: (){
+            showSearch(context: context, delegate: Search());
+          },
               icon: Icon(Icons.search_outlined,size: 30,))
         ],
       ),
