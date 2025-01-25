@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_applicaiton/model/SourceResponse.dart';
-import 'package:news_applicaiton/providers/app_theme_provider.dart';
+import 'package:news_applicaiton/ui/home/news/cubit/news_states.dart';
+import 'package:news_applicaiton/ui/home/news/cubit/news_view_model.dart';
 import 'package:news_applicaiton/ui/home/news/news_item.dart';
-import 'package:news_applicaiton/ui/home/news/news_view_model.dart';
-import 'package:news_applicaiton/utils/app_colors.dart';
-import 'package:provider/provider.dart';
 
 class NewsWidget extends StatefulWidget {
   final Source source;
@@ -16,83 +15,48 @@ class NewsWidget extends StatefulWidget {
 
 class _NewsWidgetState extends State<NewsWidget> {
 
-  NewsViewModel newsViewModel = NewsViewModel();
+  NewsViewModel viewModel = NewsViewModel();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    newsViewModel.getNewsBySourceId(widget.source.id!);
+    viewModel.getNewsBySourceId(widget.source.id!);
   }
 
   @override
   Widget build(BuildContext context) {
-    var appThemeProvider = Provider.of<AppThemeProvider>(context);
-    return ChangeNotifierProvider(
-      create: (context) => newsViewModel,
-      child: Consumer<NewsViewModel>(
-          builder: (context, value, child) {
-            if(newsViewModel.errorMessage != null){
+    viewModel.getNewsBySourceId(widget.source.id!);
+    return BlocProvider(
+      create: (context) => viewModel,
+      child: BlocBuilder<NewsViewModel,NewsState>(
+          builder: (context, state) {
+            if(state is NewsErrorState){
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(newsViewModel.errorMessage!,
-                    textAlign: TextAlign.center,),
+                    Text(state.errorMessage,
+                      textAlign: TextAlign.center,),
                     const SizedBox(height: 20,),
                     ElevatedButton(onPressed: (){
-                      newsViewModel.getNewsBySourceId(widget.source.id!);
+                      viewModel.getNewsBySourceId(widget.source.id!);
                       },
                         child: const Text('Try Again'))
                   ],
                 ),
               );
-            }else if(newsViewModel.newsList == null){
-              return Center(
-                child: CircularProgressIndicator(
-                  color: appThemeProvider.appTheme == ThemeMode.dark ?
-                  AppColors.whiteColor : AppColors.blackColor,
-                ),
+            }else if(state is NewsSuccessState){
+              return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return NewsItem(news: state.sourceList[index]);
+                  },
+                itemCount: state.sourceList.length,
               );
             }else{
-              return RefreshIndicator(
-                onRefresh: newsViewModel.refresh,
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    if(index < newsViewModel.newsList!.length){
-                      return NewsItem(news: newsViewModel.newsList![index]);
-                    }else if(newsViewModel.isLoading){
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: appThemeProvider.appTheme == ThemeMode.dark ?
-                          AppColors.whiteColor : AppColors.blackColor,
-                        ),
-                      );
-                    }
-                    else{
-                      return Center(
-                        child: newsViewModel.hasMore ?
-                        InkWell(
-                          onTap: () {
-                            newsViewModel.addPage(widget.source.id!);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 10
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Theme.of(context).indicatorColor
-                            ),
-                            child: Text('Load More News', style: Theme.of(context).textTheme.bodyMedium,),
-                          ),
-                        )
-                        :Text('No More News',style: Theme.of(context).textTheme.labelLarge,),
-                      );
-                    }
-                  },
-                  itemCount: newsViewModel.newsList!.length + 1,
+              return Center(
+                child: CircularProgressIndicator(
+                    color: Theme.of(context).indicatorColor
                 ),
               );
             }
@@ -101,3 +65,5 @@ class _NewsWidgetState extends State<NewsWidget> {
     );
   }
 }
+
+

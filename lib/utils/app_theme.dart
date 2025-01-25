@@ -18,7 +18,8 @@ class AppTheme{
         labelMedium: AppStyles.medium14Black,
         headlineLarge: AppStyles.medium20Black,
         bodyLarge: AppStyles.medium24Black,
-        bodyMedium: AppStyles.bold20White
+        bodyMedium: AppStyles.bold20White,
+        bodySmall: AppStyles.medium20Black
       ),
     indicatorColor: AppColors.blackColor,
   );
@@ -39,7 +40,8 @@ class AppTheme{
         labelMedium: AppStyles.medium14White,
         headlineLarge: AppStyles.medium20White,
         bodyLarge: AppStyles.medium24White,
-        bodyMedium: AppStyles.bold20Black
+        bodyMedium: AppStyles.bold20Black,
+          bodySmall: AppStyles.medium20White
       ),
     indicatorColor: AppColors.whiteColor
   );

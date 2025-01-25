@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:news_applicaiton/ui/home/category/category_details_view_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_applicaiton/ui/home/category/category_model.dart';
+import 'package:news_applicaiton/ui/home/category/cubit/source_states.dart';
+import 'package:news_applicaiton/ui/home/category/cubit/source_view_model.dart';
 import 'package:news_applicaiton/ui/home/category/source_tab_widget.dart';
-import 'package:provider/provider.dart';
+
 
 class CategoryDetails extends StatefulWidget {
   static const String routeName = 'Category-Details';
@@ -14,43 +16,43 @@ class CategoryDetails extends StatefulWidget {
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
-  CategoryDetailsViewModel categoryDetailsViewModel = CategoryDetailsViewModel();
+  SourceViewModel viewModel = SourceViewModel();
+
   @override
   void initState() {
     // TODO: implement initState
     print('Init State of category details ');
     super.initState();
-    categoryDetailsViewModel.getSources(widget.category.id);
+    viewModel.getSources(widget.category.id);
   }
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => categoryDetailsViewModel,
-      child: Consumer<CategoryDetailsViewModel>(
-          builder: (context, value, child) {
-            if(categoryDetailsViewModel.errorMessage != null){
+
+    return BlocProvider(
+      create: (context) => viewModel,
+      child: BlocBuilder<SourceViewModel,SourceState>(
+          builder: (context, state) {
+            if(state is SourceErrorState){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(categoryDetailsViewModel.errorMessage!,textAlign: TextAlign.center,),
+                  Text(state.errorMessage,textAlign: TextAlign.center,),
                   const SizedBox(height: 20,),
                   ElevatedButton(
                     onPressed: (){
-                      categoryDetailsViewModel.getSources(widget.category.id);
-                    },
+                      viewModel.getSources(widget.category.id);
+                      },
                     child: const Text('Try Again'),
                   )
                 ],
               );
-            }
-            if(categoryDetailsViewModel.sourcesList == null){
-              return const Center(child: CircularProgressIndicator(
-                color: Colors.teal,
+            }else if(state is SourceSuccessState){
+              return SourceTabWidget(sourcesList: state.sourceList,);
+            }else{
+              return Center(child: CircularProgressIndicator(
+                  color: Theme.of(context).indicatorColor
               ));
-            }
-            else{
-              return SourceTabWidget(sourcesList: categoryDetailsViewModel.sourcesList!,);
             }
           },
       ),
