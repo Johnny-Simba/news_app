@@ -36,6 +36,7 @@ class _NewsWidgetState extends State<NewsWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(newsViewModel.errorMessage!,
+                    style: Theme.of(context).textTheme.labelLarge,
                     textAlign: TextAlign.center,),
                     const SizedBox(height: 20,),
                     ElevatedButton(onPressed: (){

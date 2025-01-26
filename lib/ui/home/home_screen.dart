@@ -5,7 +5,6 @@ import 'package:news_applicaiton/ui/home/category/category_model.dart';
 import 'package:news_applicaiton/ui/home/drawer/home_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:news_applicaiton/ui/home/search/search_view.dart';
-
 import '../../utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {

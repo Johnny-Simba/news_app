@@ -33,7 +33,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(categoryDetailsViewModel.errorMessage!,textAlign: TextAlign.center,),
+                  Text(categoryDetailsViewModel.errorMessage!,
+                    style: Theme.of(context).textTheme.labelLarge,
+                    textAlign: TextAlign.center,),
                   const SizedBox(height: 20,),
                   ElevatedButton(
                     onPressed: (){
