@@ -56,4 +56,20 @@ class ApiManager{
       throw e;
     }
   }
+  static Future<NewsResponse> getNewsByQuery(String query) async{
+    Uri url = Uri.https(
+        ApiConstants.baseUrl,
+        EndPoints.newsApi,
+        {
+          'apiKey' : ApiConstants.apiKey,
+          'q' : query,
+        }
+    );
+    try{
+      var response = await http.get(url);
+      return NewsResponse.fromJson(jsonDecode(response.body));
+    }catch(e){
+      throw e;
+    }
+  }
 }
